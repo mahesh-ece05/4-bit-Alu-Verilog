@@ -1,10 +1,15 @@
-# 4-Bit ALU using Verilog HDL
+# 4-Bit ALU with Carry using Verilog HDL
 
 ## Project Overview
 
-This project implements a 4-bit Arithmetic Logic Unit (ALU) using Verilog HDL.
+This project is an improved version of a 4-bit Arithmetic Logic Unit (ALU)
+designed using Verilog HDL.
 
-The ALU takes two 4-bit inputs, A and B, and uses a 3-bit opcode to select one of eight arithmetic, logical, and shift operations.
+The ALU takes two 4-bit inputs, A and B, and uses a 3-bit opcode to select
+one of eight arithmetic, logical, or shift operations.
+
+In this version, a Carry output is added to preserve the extra bit generated
+during addition.
 
 ## Operations
 
@@ -19,46 +24,65 @@ The ALU takes two 4-bit inputs, A and B, and uses a 3-bit opcode to select one o
 | 110 | Left Shift | A << 1 |
 | 111 | Right Shift | A >> 1 |
 
-## Inputs and Output
+## Inputs and Outputs
 
 - A: 4-bit input
 - B: 4-bit input
 - Opcode: 3-bit operation selector
-- Y: 4-bit output
+- Y: 4-bit result
+- Carry: Carry output for addition
 
-A 3-bit opcode is used because:
+## Carry Handling
 
-**2³ = 8**, so it can select 8 different operations.
+A 4-bit output can represent values from 0 to 15.
+
+For example:
+
+10 + 8 = 18
+
+Binary addition:
+
+    1010
+  + 1000
+  -------
+   10010
+
+Therefore:
+
+- Carry = 1
+- Y = 0010
+
+The Carry output preserves the extra bit produced during addition.
 
 ## Verification
 
 The ALU was verified using a Verilog testbench.
 
-Test inputs:
+Test cases included:
 
-- A = 0101 (5)
-- B = 0011 (3)
+- 5 + 3 = 8, Carry = 0
+- 10 + 8 = 18, Carry = 1
+- Subtraction
+- AND
+- OR
+- XOR
+- NOT
+- Left shift
+- Right shift
 
-The simulation was checked using EPWave, and the expected results were obtained for all 8 operations.
-
-### Example Results
-
-- ADD: 5 + 3 = 8
-- SUB: 5 - 3 = 2
-- AND: 5 & 3 = 1
-- OR: 5 | 3 = 7
-- XOR: 5 ^ 3 = 6
-- NOT: ~5 = 10
-- Left Shift: 5 << 1 = 10
-- Right Shift: 5 >> 1 = 2
+The simulation results were verified using waveforms in EPWave.
 
 ## Synthesis and RTL Schematic
 
 The ALU design was synthesized using Yosys.
 
-Synthesis converts the Verilog RTL description into a hardware logic representation.
+The synthesized RTL schematic shows the hardware logic generated from
+the Verilog description, including the operation-selection and output
+logic controlled by the opcode.
 
-The synthesized RTL schematic shows the logic generated for the ALU operations and the selection of the required output based on the opcode.
+The RTL schematic is included in this project as:
+
+`RTL_schematic_v2.png`
 
 ## Tools Used
 
@@ -70,23 +94,18 @@ The synthesized RTL schematic shows the logic generated for the ALU operations a
 
 ## Project Files
 
-- `1_alu.v` — ALU design
-- `2_alu_tb.v` — Verilog testbench
-- `3_waveform_4bit_ALU.png` — Simulation waveform
-- `4_RTL_schematic.png` — Synthesized RTL schematic
-- `5_README.md` — Project documentation
+- `alu_v2_carry.v` — Improved ALU design with Carry
+- `alu_tb_v2_carry.v` — Verilog testbench
+- `alu_v2_waveforms.png` — Simulation waveform
+- `RTL_schematic_v2.png` — Synthesized RTL schematic
+- `README2.md` — Project documentation
 
-## Project Workflow
+## Improvement Over V1
 
-**Verilog Design → Testbench → Simulation → Waveform → Synthesis → RTL Schematic**
+V1 provided only a 4-bit result.
 
-## Learning Outcome
+V2 adds a Carry output so that the extra bit generated during addition
+is not lost.
 
-Through this project, I learned:
-
-- Basic Verilog module design
-- Using `case` statements for operation selection
-- Writing a Verilog testbench
-- Simulating and verifying a digital design
-- Understanding waveforms
-- Basic RTL synthesis and schematic generation
+V2 also includes synthesis and an RTL schematic to show the hardware
+structure generated from the Verilog design.
